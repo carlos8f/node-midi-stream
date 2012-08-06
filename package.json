@@ -1,0 +1,28 @@
+{
+  "name": "midi-stream",
+  "version": "0.0.0",
+  "description": "Stream interface for MIDI messages",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/carlos8f/node-midi-stream.git"
+  },
+  "keywords": [
+    "midi",
+    "stream",
+    "music"
+  ],
+  "author": "Carlos Rodriguez",
+  "license": "MIT",
+  "dependencies": {
+    "midi": "~0.6.0"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "mac-synth": "~0.0.1",
+    "idgen": "1.x"
+  }
+}
