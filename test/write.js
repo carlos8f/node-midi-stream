@@ -11,14 +11,14 @@ var MESSAGE_MSBCONTROL = 0;
 var MESSAGE_LSBCONTROL = 32;
 var MESSAGE_NOTEON = 0x9;
 var channel = 0;
-
+ 
 function messageStatus(code) {
   return code << 4 | channel;
 }
 
-describe('basic test', function() {
-  var instrument, virtualOutput, sourceStream, destStream, virtualOutputName;
-  after(function() {
+describe('write test', function() {
+  var instrument, sourceStream, destStream;
+  process.on('exit', function() {
     if (instrument) {
       instrument.kill();
     }
@@ -30,20 +30,17 @@ describe('basic test', function() {
       done();
     });
   });
-  it('creates source stream', function() {
-    virtualOutput = new midi.output();
-    virtualOutputName = 'midi-stream test output #' + idgen();
-    virtualOutput.openVirtualPort(virtualOutputName);
-    sourceStream = midistream.readable(virtualOutputName);
-  });
-  it('should pipe OK', function() {
-    sourceStream.pipe(destStream);
-  });
   it('should play the synth', function(done) {
-    var messages = [
+    var expected = [
       [messageStatus(MESSAGE_CONTROLCHANGE), MESSAGE_MSBCONTROL, 0],
       [messageStatus(MESSAGE_PROGRAMCHANGE), 0, 0],
       [messageStatus(MESSAGE_NOTEON), 60, 127],
+      [messageStatus(MESSAGE_NOTEON), 60, 0]
+    ];
+    var messages = [
+      '1', '76', ',0,0\n',
+      '192', ',0,0', '\n',
+      '14', '4,', '60', ',', '127\n',
       [messageStatus(MESSAGE_NOTEON), 60, 0]
     ];
     var captured = [];
@@ -54,16 +51,16 @@ describe('basic test', function() {
         });
       });
       captured = captured.concat(capture);
-      if (captured.length === messages.length) {
-        assert.deepEqual(captured, messages);
+      if (captured.length === 4) {
+        assert.deepEqual(captured, expected);
         done();
       }
     });
-    for (var i = 0; i < 3; i++) {
-      virtualOutput.sendMessage(messages[i]);
+    for (var i = 0; i < messages.length - 1; i++) {
+      destStream.write(messages[i]);
     }
     setTimeout(function() {
-      virtualOutput.sendMessage(messages[3]);
+      destStream.write(messages[messages.length - 1]);
     }, 2000);
   });
 });
