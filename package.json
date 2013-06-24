@@ -24,6 +24,7 @@
     "mocha": "*",
     "mac-synth": "git+https://github.com/carlos8f/mac-synth.git",
     "idgen": "1.x",
-    "coremidi": "~0.1.1"
+    "coremidi": "~0.1.1",
+    "event-stream": "~3.0.15"
   }
 }
