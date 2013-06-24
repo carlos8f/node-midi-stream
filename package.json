@@ -22,7 +22,7 @@
   },
   "devDependencies": {
     "mocha": "*",
-    "mac-synth": "~0.0.1",
+    "mac-synth": "git+https://github.com/carlos8f/mac-synth.git",
     "idgen": "1.x"
   }
 }
